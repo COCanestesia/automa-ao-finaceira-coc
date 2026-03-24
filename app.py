@@ -62,7 +62,7 @@ if "carregado" not in st.session_state:
 
     st.session_state.carregado = True
 
-# ================================
+# ================================        
 # SIDEBAR
 # ================================
 st.sidebar.header("🏦 Saldos Bancários e Filtros")
@@ -139,16 +139,11 @@ ABA_SALDOS = "Saldos"
 
 try:
 
-    conn = st.connection("gsheets", type=GSheetsConnection)
-
     # 🔥 LÊ SOMENTE A ABA CORRETA (EVITA PEGAR SALDOS)
-    df = conn.read(
-        spreadsheet=URL_PLANILHA,
-        worksheet=ABA_DADOS,
-        header=0,
-        ttl=0
-    )
+    worksheet = sheet.worksheet(ABA_DADOS)
+    data = worksheet.get_all_recordds()
 
+    df = pd.DataFrame(data)
 
     df.columns = (
         df.columns.astype(str)
