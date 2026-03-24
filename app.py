@@ -1,5 +1,5 @@
 import streamlit as st
-from st-gsheets-connection import GSheetsConnection
+from st_gsheets_connection import GSheetsConnection
 import pandas as pd
 import numpy as np
 from datetime import datetime
