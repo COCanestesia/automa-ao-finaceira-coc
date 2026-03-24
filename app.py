@@ -141,7 +141,7 @@ try:
 
     # 🔥 LÊ SOMENTE A ABA CORRETA (EVITA PEGAR SALDOS)
     worksheet = sheet.worksheet(ABA_DADOS)
-    data = worksheet.get_all_recordds()
+    data = worksheet.get_all_records()
 
     df = pd.DataFrame(data)
 
