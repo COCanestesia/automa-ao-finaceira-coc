@@ -1,19 +1,34 @@
 import streamlit as st
-from st_gsheets_connection import GSheetsConnection
 import pandas as pd
 import numpy as np
 from datetime import datetime
 import altair as alt
 
+import gspread
+from google.oauth2.service_account import Credentials
 
-## ================================
+# ================================
 # CONFIG
 # ================================
 st.set_page_config(page_title="Gestão Financeira Master", layout="wide")
 
 URL_PLANILHA = "https://docs.google.com/spreadsheets/d/1VyFBo9qeKQOjdTtvtuQjsVBQGQ54Yh0iYVkaH-iG4wM/edit"
 
-conn = st.connection("gsheets", type=GSheetsConnection)
+# ================================
+# CONEXÃO GOOGLE SHEETS (NOVA)
+# ================================
+scope = [
+    "https://spreadsheets.google.com/feeds",
+    "https://www.googleapis.com/auth/drive"
+]
+
+credentials = Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"],
+    scopes=scope
+)
+
+client = gspread.authorize(credentials)
+sheet = client.open_by_url(URL_PLANILHA)
 
 
 # ================================
