@@ -98,11 +98,15 @@ with st.sidebar.expander("Saldos em Conta", expanded=True):
 
         df_novo = pd.concat([df_existente, df_saldo], ignore_index=True)
 
-        conn.update(
-            spreadsheet=URL_PLANILHA,
-            worksheet="Saldos",
-            data=df_novo
-        )
+       worksheet_saldos = sheet.worksheet(ABA_SALDOS)
+
+       # limpa a aba
+       worksheet_saldos.clear()
+
+       # escreve os dados
+       worksheet_saldos.update(
+           [df_saldos.columns.values.tolist()] + df_saldos.values.tolist()
+       )
 
         st.success("✅ Saldos salvos com sucesso!")
 
