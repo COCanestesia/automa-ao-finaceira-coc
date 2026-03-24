@@ -48,7 +48,9 @@ if "brasil" not in st.session_state:
 # ================================
 if "carregado" not in st.session_state:
     try:
-        df_saldos = conn.read(spreadsheet=URL_PLANILHA, worksheet="Saldos")
+        worksheet_saldos = sheet.worksheet("Saldos")
+        data = worksheet_saldos.get_all_records()
+        df_saldos = pd.DataFrame(data)
 
         if not df_saldos.empty:
             ultimo = df_saldos.iloc[-1]
@@ -92,20 +94,22 @@ with st.sidebar.expander("Saldos em Conta", expanded=True):
         }])
 
         try:
-            df_existente = conn.read(spreadsheet=URL_PLANILHA, worksheet="Saldos")
+            worksheet_saldos = sheet.worksheet("Saldos")
+            data = worksheet_saldos.get_all_records()
+            df_existente = pd.DataFrame(data)
         except:
-               df_existente = pd.DataFrame(columns=["Data", "Caixa", "Bradesco", "Banco do Brasil"])
+            df_existente = pd.DataFrame(columns=["Data", "Caixa", "Bradesco", "Banco do Brasil"])
 
         df_novo = pd.concat([df_existente, df_saldo], ignore_index=True)
 
-        worksheet_saldos = sheet.worksheet(ABA_SALDOS)
+        worksheet_saldos = sheet.worksheet("Saldos")
 
         # limpa a aba
         worksheet_saldos.clear()
 
-        # escreve os dados
+        # escreve os dados CORRETOS
         worksheet_saldos.update(
-            [df_saldos.columns.values.tolist()] + df_saldos.values.tolist()
+            [df_novo.columns.values.tolist()] + df_novo.values.tolist()
         )
 
         st.success("✅ Saldos salvos com sucesso!")
